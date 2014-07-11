@@ -39,8 +39,7 @@ public class GoodTuring {
 	}
 
 	public static List<Object> main(Map<String, Double> data) {
-		List<Double> r = new ArrayList<Double>();
-		List<Double> rd = new ArrayList<Double>(), zd = new ArrayList<Double>(), nr = new ArrayList<Double>(), prob = new ArrayList<Double>(), z = new ArrayList<Double>();
+		List<Double> r = new ArrayList<Double>(), rd = new ArrayList<Double>(), zd = new ArrayList<Double>(), nr = new ArrayList<Double>(), prob = new ArrayList<Double>(), z = new ArrayList<Double>();
 		List<Double> values = new ArrayList<Double>(data.values());
 		Collections.sort(values);
 		for (double value : values) {
@@ -91,7 +90,7 @@ public class GoodTuring {
 		for (int i = 0; i < prob.size(); i++) {
 			prob.set(i, (1 - nr.get(0) / total) * prob.get(i) / sump);
 		}
-		//nr.get(0)/total/total;
+		// nr.get(0)/total/total;
 		List<Object> mixResult = new ArrayList<Object>();
 		Map<String, Double> result = new HashMap<String, Double>();
 		for (Map.Entry<String, Double> entry : data.entrySet()) {

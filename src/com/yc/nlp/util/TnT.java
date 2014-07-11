@@ -70,104 +70,52 @@ public class TnT {
 		return num;
 	}
 
-	public void setNum(Integer num) {
-		this.num = num;
-	}
-
 	public Double getL1() {
 		return l1;
-	}
-
-	public void setL1(Double l1) {
-		this.l1 = l1;
 	}
 
 	public Double getL2() {
 		return l2;
 	}
 
-	public void setL2(Double l2) {
-		this.l2 = l2;
-	}
-
 	public Double getL3() {
 		return l3;
-	}
-
-	public void setL3(Double l3) {
-		this.l3 = l3;
 	}
 
 	public Set<String> getStatus() {
 		return status;
 	}
 
-	public void setStatus(Set<String> status) {
-		this.status = status;
-	}
-
 	public BaseProb getWd() {
 		return wd;
-	}
-
-	public void setWd(BaseProb wd) {
-		this.wd = wd;
 	}
 
 	public BaseProb getEos() {
 		return eos;
 	}
 
-	public void setEos(BaseProb eos) {
-		this.eos = eos;
-	}
-
 	public BaseProb getEosd() {
 		return eosd;
-	}
-
-	public void setEosd(BaseProb eosd) {
-		this.eosd = eosd;
 	}
 
 	public BaseProb getUni() {
 		return uni;
 	}
 
-	public void setUni(BaseProb uni) {
-		this.uni = uni;
-	}
-
 	public BaseProb getBi() {
 		return bi;
-	}
-
-	public void setBi(BaseProb bi) {
-		this.bi = bi;
 	}
 
 	public BaseProb getTri() {
 		return tri;
 	}
 
-	public void setTri(BaseProb tri) {
-		this.tri = tri;
-	}
-
 	public Map<String, Set<String>> getWord() {
 		return word;
 	}
 
-	public void setWord(Map<String, Set<String>> word) {
-		this.word = word;
-	}
-
 	public Map<Object, Double> getTrans() {
 		return trans;
-	}
-
-	public void setTrans(Map<Object, Double> trans) {
-		this.trans = trans;
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -217,7 +165,8 @@ public class TnT {
 			byte[] bytes = new byte[2048 * 10000];
 			byte[] result = null;
 			byte[] temp = null;
-			in = new DataInputStream(new BufferedInputStream(new FileInputStream(new File(this.getClass().getClassLoader().getResource(fname).getPath()))));
+			in = new DataInputStream(new BufferedInputStream(new FileInputStream(new File(this.getClass().getClassLoader().getResource(fname)
+					.getPath()))));
 			int num = 0, beginPos = 0;
 			while ((num = in.read(bytes)) > 0) {
 				if (result != null) {
@@ -340,18 +289,8 @@ public class TnT {
 	}
 
 	public List<Result> tag(List<String> data) throws Exception {
-		//		PriorityQueue<Tag> tags = new PriorityQueue<Tag>(getNum(), new Comparator<Tag>() {
-		//			public int compare(Tag o1, Tag o2) {
-		//				// 生成最大堆使用o2-o1,生成最小堆使用o1-o2, 并修改 e.compareTo(peek) 比较规则
-		//				if (o2.getScore() == o1.getScore())
-		//					return 0;
-		//				return (o2.getScore() - o1.getScore() > 0 ? 1 : -1);
-		//			}
 		List<Tag> tags = new ArrayList<Tag>(getNum());
 		tags.add(new Tag(new Pre("BOS", "BOS"), 0.0, ""));
-		//PriorityQueue<Tag> tags = new PriorityQueue<Tag>((Collection<? extends Tag>) new Tag(new Pre("BOS", "BOS"), 0.0, ""));
-		//List<Tag> tags = new ArrayList<Tag>((Collection<? extends Tag>) new Tag(new Pre("BOS", "BOS"), 0.0, ""));
-		//tags.add(new Tag(new Pre("BOS", "BOS"), 0.0, ""));
 		Map<Pre, StageValue> stage = new HashMap<Pre, StageValue>();
 		for (String ch : data) {
 			stage = new HashMap<Pre, StageValue>();
@@ -376,7 +315,6 @@ public class TnT {
 			}
 			Collections.sort(tags, new Comparator<Tag>() {
 				public int compare(Tag o1, Tag o2) {
-					// 生成最大堆使用o2-o1,生成最小堆使用o1-o2, 并修改 e.compareTo(peek) 比较规则
 					if (o2.getScore() == o1.getScore())
 						return 0;
 					return (o2.getScore() - o1.getScore() > 0 ? 1 : -1);
@@ -393,16 +331,11 @@ public class TnT {
 		}
 		Collections.sort(tags, new Comparator<Tag>() {
 			public int compare(Tag o1, Tag o2) {
-				// 生成最大堆使用o2-o1,生成最小堆使用o1-o2, 并修改 e.compareTo(peek) 比较规则
 				if (o2.getScore() == o1.getScore())
 					return 0;
 				return (o2.getScore() - o1.getScore() > 0 ? 1 : -1);
 			}
 		});
-		//while (tags.size() > 1) {
-		//tags.subList(0, 1);
-		//}
-		//tags.retainAll(Collections.singleton(tags.peek()));
 		List<Result> results = new ArrayList<Result>();
 		String[] tagArr = tags.get(0).getSuffix().split("-");
 		if (tagArr.length != data.size()) {
@@ -452,13 +385,13 @@ public class TnT {
 	}
 
 	public static void main(String[] args) {
-		//TnT tnt = new TnT(1000);
-		//tnt.save("seg.marshal");
-		//tnt.load("seg.marshal");
-		//		Map<String, Integer> test = new ConcurrentHashMap<String, Integer>();
-		//		for (int i = 0; i < 100000000; i++) {
-		//			test.put(i + "", i);
-		//			System.out.println(i);
-		//		}
+		// TnT tnt = new TnT(1000);
+		// tnt.save("seg.marshal");
+		// tnt.load("seg.marshal");
+		// Map<String, Integer> test = new ConcurrentHashMap<String, Integer>();
+		// for (int i = 0; i < 100000000; i++) {
+		// test.put(i + "", i);
+		// System.out.println(i);
+		// }
 	}
 }

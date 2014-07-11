@@ -3,6 +3,12 @@ package com.yc.nlp.util;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * extends arraylist to change the toString() method
+ * @author uohzoaix
+ *
+ * @param <E>
+ */
 public class Tuple<E> extends ArrayList<E> {
 
 	private static final long serialVersionUID = -2183616577654310036L;
