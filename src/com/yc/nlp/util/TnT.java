@@ -13,7 +13,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +26,7 @@ import java.util.Set;
 
 import com.yc.nlp.pojo.Pre;
 import com.yc.nlp.pojo.Result;
+import com.yc.nlp.pojo.StageValue;
 import com.yc.nlp.pojo.Tag;
 import com.yc.nlp.pojo.WordTag;
 import com.yc.nlp.prop.AddOneProb;
@@ -118,6 +118,10 @@ public class TnT {
 		return trans;
 	}
 
+	/**
+	 * 将内存中的数据写到文件中
+	 * @param fname
+	 */
 	@SuppressWarnings("rawtypes")
 	public void save(String fname) {
 		Map<String, Object> data = new HashMap<String, Object>();
@@ -159,6 +163,10 @@ public class TnT {
 		}
 	}
 
+	/**
+	 * 将文件内容导入到内存
+	 * @param fname
+	 */
 	@SuppressWarnings("unchecked")
 	public void load(String fname) {
 		try {
@@ -255,7 +263,7 @@ public class TnT {
 		}
 		double tl1 = 0.0, tl2 = 0.0, tl3 = 0.0;
 		for (String key : this.tri.samples()) {
-			now = fromStr(key);
+			now = Tuple.fromStr(key);
 			double c3 = this.tntDiv(this.tri.get(now.toString()) - 1, this.bi.get(now.subList(0, 2).toString()) - 1);
 			double c2 = this.tntDiv(this.bi.get(now.subList(1, now.size()).toString()) - 1, this.uni.get(now.get(1)) - 1);
 			double c1 = this.tntDiv(this.uni.get(now.get(2)) - 1, this.uni.getSum() - 1);
@@ -345,43 +353,6 @@ public class TnT {
 			results.add(new Result(data.get(i), tagArr[i]));
 		}
 		return results;
-	}
-
-	final class StageValue implements Serializable {
-		private static final long serialVersionUID = 871588630083195569L;
-		private Double score;
-		private String value;
-
-		public StageValue(Double score, String value) {
-			this.score = score;
-			this.value = value;
-		}
-
-		public Double getScore() {
-			return score;
-		}
-
-		public void setScore(Double score) {
-			this.score = score;
-		}
-
-		public String getValue() {
-			return value;
-		}
-
-		public void setValue(String value) {
-			this.value = value;
-		}
-
-	}
-
-	public static Tuple<String> fromStr(String ele) {
-		Tuple<String> strs = new Tuple<String>();
-		String[] strArr = ele.split("-");
-		for (String str : strArr) {
-			strs.add(str);
-		}
-		return strs;
 	}
 
 	public static void main(String[] args) {

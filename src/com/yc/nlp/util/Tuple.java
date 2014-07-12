@@ -5,8 +5,9 @@ import java.util.Iterator;
 
 /**
  * extends arraylist to change the toString() method
+ * 
  * @author uohzoaix
- *
+ * 
  * @param <E>
  */
 public class Tuple<E> extends ArrayList<E> {
@@ -15,6 +16,15 @@ public class Tuple<E> extends ArrayList<E> {
 
 	public Tuple() {
 		super();
+	}
+
+	public static Tuple<String> fromStr(String ele) {
+		Tuple<String> strs = new Tuple<String>();
+		String[] strArr = ele.split("-");
+		for (String str : strArr) {
+			strs.add(str);
+		}
+		return strs;
 	}
 
 	@Override
