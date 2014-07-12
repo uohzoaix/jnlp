@@ -54,54 +54,6 @@ public class TnT {
 		return num;
 	}
 
-	public Double getL1() {
-		return l1;
-	}
-
-	public Double getL2() {
-		return l2;
-	}
-
-	public Double getL3() {
-		return l3;
-	}
-
-	public Set<String> getStatus() {
-		return status;
-	}
-
-	public BaseProb getWd() {
-		return wd;
-	}
-
-	public BaseProb getEos() {
-		return eos;
-	}
-
-	public BaseProb getEosd() {
-		return eosd;
-	}
-
-	public BaseProb getUni() {
-		return uni;
-	}
-
-	public BaseProb getBi() {
-		return bi;
-	}
-
-	public BaseProb getTri() {
-		return tri;
-	}
-
-	public Map<String, Set<String>> getWord() {
-		return word;
-	}
-
-	public Map<Object, Double> getTrans() {
-		return trans;
-	}
-
 	/**
 	 * 将内存中的数据写到文件中
 	 * 
