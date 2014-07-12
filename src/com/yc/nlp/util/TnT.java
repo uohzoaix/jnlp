@@ -213,5 +213,6 @@ public class TnT {
 		TnT tnt = new TnT(1000);
 		tnt.save("seg.marshal");
 		tnt.load("seg.marshal");
+		
 	}
 }
