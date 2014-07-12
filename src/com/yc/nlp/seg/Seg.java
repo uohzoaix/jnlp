@@ -33,7 +33,8 @@ public class Seg {
 		BufferedReader br = null;
 		List<List<WordTag>> wordTags = new ArrayList<List<WordTag>>();
 		try {
-			reader = new FileReader(new File(this.getClass().getClassLoader().getResource(this.getClass().getPackage().getName().replace(".", "/") + "/" + fileName).getPath()));
+			reader = new FileReader(new File(this.getClass().getClassLoader()
+					.getResource(this.getClass().getPackage().getName().replace(".", "/") + "/" + fileName).getPath()));
 			br = new BufferedReader(reader);
 			String line = null;
 			while ((line = br.readLine()) != null) {
@@ -107,9 +108,8 @@ public class Seg {
 
 	public static void main(String[] args) {
 		Seg seg = new Seg();
-		seg.train("data.txt");//主要是用来放置一些简单快速的中文分词和词性标注的程序
-		//seg.save("seg1.marshal");
+		seg.train("data.txt");// 主要是用来放置一些简单快速的中文分词和词性标注的程序
+		seg.save("seg1.marshal");
 		System.out.println(seg.seg("这个东西真心很赞"));
-		//System.out.println(seg.getClass().getPackage().getName());
 	}
 }
