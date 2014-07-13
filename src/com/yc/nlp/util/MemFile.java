@@ -2,6 +2,7 @@ package com.yc.nlp.util;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
@@ -10,11 +11,13 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -181,5 +184,105 @@ public class MemFile {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * 初始化BufferedReader
+	 * @param fileName
+	 * @param obj
+	 * @return
+	 */
+	public static BufferedReader readFile(String fileName, Object obj) {
+		BufferedReader br = null;
+		try {
+			br = new BufferedReader(new FileReader(new File(obj.getClass().getClassLoader()
+					.getResource(obj.getClass().getPackage().getName().replace(".", "/") + "/" + fileName).getPath())));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		return br;
+	}
+
+	/**
+	 * 读取停止词文件
+	 * @param br
+	 * @return
+	 */
+	public static Set<String> stopFile(BufferedReader br) {
+		String line = null;
+		Set<String> stop = new HashSet<String>();
+		try {
+			while ((line = br.readLine()) != null) {
+				line = line.trim();
+				stop.add(line);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return stop;
+	}
+
+	/**
+	 * 读取拼音文件
+	 * @param br
+	 * @param pinyin
+	 * @return
+	 */
+	public static Map<String, String> pyFile(BufferedReader br, Map<String, String> pinyin) {
+		String line = null;
+		String[] words = null;
+		try {
+			while ((line = br.readLine()) != null) {
+				words = line.trim().split("\\s+", 2);
+				pinyin.put(words[0], words[1]);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return pinyin;
+	}
+
+	/**
+	 * 读取繁体字文件
+	 * @param br
+	 * @param zh2hans
+	 * @return
+	 */
+	public static Map<String, String> hansFile(BufferedReader br, Map<String, String> zh2hans) {
+		String[] words = null;
+		String line = null;
+		try {
+			while ((line = br.readLine()) != null) {
+				words = line.trim().split("\\|");
+				zh2hans.put(words[0], words.length == 1 ? "" : words[1]);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return zh2hans;
 	}
 }

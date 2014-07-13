@@ -1,10 +1,6 @@
 package com.yc.nlp.normal;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,6 +12,8 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.yc.nlp.util.MemFile;
+
 public class Normal {
 
 	private static Logger logger = LoggerFactory.getLogger(Normal.class);
@@ -25,64 +23,29 @@ public class Normal {
 
 	public Normal() {
 		logger.debug("initialize normal begin...");
-		initStop("stopwords.txt");
-		initPinyin("pinyin.txt");
+		try {
+			stop = initStop("stopwords.txt");
+			pinyin = initPinyin("pinyin.txt");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		logger.debug("initialize normal end...");
 	}
 
-	public void initStop(String stopFile) {
-		FileReader reader = null;
-		BufferedReader br = null;
-		try {
-			reader = new FileReader(new File(this.getClass().getClassLoader().getResource(this.getClass().getPackage().getName().replace(".", "/") + "/" + stopFile).getPath()));
-			br = new BufferedReader(reader);
-			String line = null;
-			while ((line = br.readLine()) != null) {
-				line = line.trim();
-				stop.add(line);
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (br != null)
-					br.close();
-				if (reader != null)
-					reader.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+	public Set<String> initStop(String stopFile) throws Exception {
+		BufferedReader br = MemFile.readFile(stopFile, this);
+		if (br != null) {
+			return MemFile.stopFile(br);
 		}
+		throw new Exception("Normal读取" + stopFile + "出错");
 	}
 
-	public void initPinyin(String pyFile) {
-		FileReader reader = null;
-		BufferedReader br = null;
-		try {
-			reader = new FileReader(new File(this.getClass().getClassLoader().getResource(this.getClass().getPackage().getName().replace(".", "/") + "/" + pyFile).getPath()));
-			br = new BufferedReader(reader);
-			String line = null;
-			String[] words = null;
-			while ((line = br.readLine()) != null) {
-				words = line.trim().split("\\s+", 2);
-				pinyin.put(words[0], words[1]);
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (br != null)
-					br.close();
-				if (reader != null)
-					reader.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+	public Map<String, String> initPinyin(String pyFile) throws Exception {
+		BufferedReader br = MemFile.readFile(pyFile, this);
+		if (br != null) {
+			return MemFile.pyFile(br, pinyin);
 		}
+		throw new Exception("Normal读取" + pyFile + "出错");
 	}
 
 	public List<String> filterStop(List<String> words) {

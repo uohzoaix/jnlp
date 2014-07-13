@@ -1,12 +1,10 @@
 package com.yc.nlp.normal;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.yc.nlp.util.MemFile;
 
 public class ZH {
 
@@ -15,7 +13,11 @@ public class ZH {
 	private Integer maxl = 0;
 
 	public ZH() {
-		initHans("zh2hans.txt");
+		try {
+			initHans("zh2hans.txt");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		for (String key : zh2hans.keySet()) {
 			if (key.length() > maxl) {
 				maxl = key.length();
@@ -23,32 +25,12 @@ public class ZH {
 		}
 	}
 
-	public void initHans(String hansFile) {
-		FileReader reader = null;
-		BufferedReader br = null;
-		try {
-			reader = new FileReader(new File(this.getClass().getClassLoader().getResource(this.getClass().getPackage().getName().replace(".", "/") + "/" + hansFile).getPath()));
-			br = new BufferedReader(reader);
-			String[] words = null;
-			String line = null;
-			while ((line = br.readLine()) != null) {
-				words = line.trim().split("\\|");
-				zh2hans.put(words[0], words.length == 1 ? "" : words[1]);
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (br != null)
-					br.close();
-				if (reader != null)
-					reader.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+	public Map<String, String> initHans(String hansFile) throws Exception {
+		BufferedReader br = MemFile.readFile(hansFile, this);
+		if (br != null) {
+			return MemFile.hansFile(br, zh2hans);
 		}
+		throw new Exception("ZH读取" + hansFile + "出错");
 	}
 
 	public String transfer(String sentence) {
