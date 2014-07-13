@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.yc.nlp.prop.AddOneProb;
 import com.yc.nlp.prop.BaseProb;
 
 public class MemFile {
@@ -31,7 +32,7 @@ public class MemFile {
 	 * @param fname
 	 */
 	@SuppressWarnings("rawtypes")
-	public static void tntSave(String fname, Object obj) {
+	public static void loadFromMem(String fname, Object obj) {
 		Map<String, Object> data = new HashMap<String, Object>();
 		Field[] fields = obj.getClass().getDeclaredFields();
 		for (Field field : fields) {
@@ -52,7 +53,7 @@ public class MemFile {
 				e.printStackTrace();
 			}
 		}
-		loadToFile(data, fname);
+		saveToFile(data, fname);
 	}
 
 	/**
@@ -61,7 +62,7 @@ public class MemFile {
 	 * @param fname
 	 * @throws Exception
 	 */
-	public static void tntLoad(String fname, Object obj) throws Exception {
+	public static byte[] loadFromFile(String fname, Object obj) throws Exception {
 		byte[] result = null;
 		try {
 			byte[] bytes = new byte[2048 * 10000];
@@ -92,14 +93,10 @@ public class MemFile {
 					e.printStackTrace();
 				}
 		}
-		if (result != null) {
-			loadToMem(result, obj);
-			return;
-		}
-		throw new Exception("读取" + fname + "文件出错！");
+		return result;
 	}
 
-	public static void loadToFile(Object data, String fname) {
+	public synchronized static void saveToFile(Object data, String fname) {
 		try {
 			ByteArrayOutputStream bo = new ByteArrayOutputStream();
 			ObjectOutputStream os = new ObjectOutputStream(bo);
@@ -122,7 +119,7 @@ public class MemFile {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static void loadToMem(byte[] result, Object obj) {
+	public synchronized static void loadToMem(byte[] result, Object obj) {
 		try {
 			ByteArrayInputStream bi = new ByteArrayInputStream(result);
 			ObjectInputStream oi = new ObjectInputStream(bi);
@@ -130,8 +127,8 @@ public class MemFile {
 			for (Map.Entry<String, Object> entry : data.entrySet()) {
 				Field[] fields = obj.getClass().getDeclaredFields();
 				for (Field field : fields) {
-					field.setAccessible(!field.isAccessible());
 					if (field.getName().equals(entry.getKey())) {
+						field.setAccessible(!field.isAccessible());
 						try {
 							field.set(obj, entry.getValue());
 							field.setAccessible(!field.isAccessible());
@@ -148,6 +145,41 @@ public class MemFile {
 			e.printStackTrace();
 		} catch (IOException e1) {
 			e1.printStackTrace();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public synchronized static void bayesLoadToMem(byte[] result, Object obj) {
+		try {
+			ByteArrayInputStream bi = new ByteArrayInputStream(result);
+			ObjectInputStream oi = new ObjectInputStream(bi);
+			Map<String, Object> data = (Map<String, Object>) oi.readObject();
+			for (Map.Entry<String, Object> entry : data.entrySet()) {
+				Field[] fields = obj.getClass().getDeclaredFields();
+				for (Field field : fields) {
+					if (field.getName().equals(entry.getKey())) {
+						field.setAccessible(!field.isAccessible());
+						if (field.getName().equals("d")) {
+							Map<String, AddOneProb> value = (Map<String, AddOneProb>) entry.getValue();
+							Map<String, AddOneProb> d = new HashMap<String, AddOneProb>();
+							for (Map.Entry<String, AddOneProb> entry1 : value.entrySet()) {
+								d.put(entry1.getKey(), entry1.getValue());
+							}
+							field.set(obj, d);
+						} else {
+							field.set(obj, entry.getValue());
+						}
+						field.setAccessible(!field.isAccessible());
+						break;
+					}
+				}
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 }

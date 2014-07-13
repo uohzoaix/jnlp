@@ -60,7 +60,7 @@ public class TnT {
 	 * @param fname
 	 */
 	public void save(String fname) {
-		MemFile.tntSave(fname, this);
+		MemFile.loadFromMem(fname, this);
 	}
 
 	/**
@@ -70,7 +70,12 @@ public class TnT {
 	 */
 	public void load(String fname) {
 		try {
-			MemFile.tntLoad(fname, this);
+			byte[] result = MemFile.loadFromFile(fname, this);
+			if (result != null) {
+				MemFile.loadToMem(result, this);
+				return;
+			}
+			throw new Exception("TnT读取" + fname + "文件出错！");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -213,6 +218,6 @@ public class TnT {
 		TnT tnt = new TnT(1000);
 		tnt.save("seg.marshal");
 		tnt.load("seg.marshal");
-		
+
 	}
 }
