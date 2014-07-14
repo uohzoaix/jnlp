@@ -20,6 +20,11 @@ public class InitSeg {
 		logger.debug("initialize initseg end...");
 	}
 
+	/**
+	 * 对所有的中文进行分词
+	 * @param sent
+	 * @return
+	 */
 	public List<String> seg(String sent) {
 		List<String> words = new ArrayList<String>();
 		Pattern pattern = Pattern.compile("([u4E00-u9FA5]+)");
@@ -43,6 +48,11 @@ public class InitSeg {
 		return words;
 	}
 
+	/**
+	 * 对单独的句子进行分词
+	 * @param sent
+	 * @return
+	 */
 	public List<String> singleSeg(String sent) {
 		return segger.seg(sent);
 	}

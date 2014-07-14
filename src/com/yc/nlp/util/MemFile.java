@@ -16,11 +16,14 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.yc.nlp.pojo.WordTag;
 import com.yc.nlp.prop.AddOneProb;
 import com.yc.nlp.prop.BaseProb;
 
@@ -188,6 +191,7 @@ public class MemFile {
 
 	/**
 	 * 初始化BufferedReader
+	 * 
 	 * @param fileName
 	 * @param obj
 	 * @return
@@ -205,6 +209,7 @@ public class MemFile {
 
 	/**
 	 * 读取停止词文件
+	 * 
 	 * @param br
 	 * @return
 	 */
@@ -232,6 +237,7 @@ public class MemFile {
 
 	/**
 	 * 读取拼音文件
+	 * 
 	 * @param br
 	 * @param pinyin
 	 * @return
@@ -260,6 +266,7 @@ public class MemFile {
 
 	/**
 	 * 读取繁体字文件
+	 * 
 	 * @param br
 	 * @param zh2hans
 	 * @return
@@ -284,5 +291,31 @@ public class MemFile {
 			}
 		}
 		return zh2hans;
+	}
+
+	public static List<List<WordTag>> segFile(BufferedReader br, List<List<WordTag>> wordTags) {
+		String line = null;
+		try {
+			while ((line = br.readLine()) != null) {
+				line = line.trim();
+				List<WordTag> wts = new ArrayList<WordTag>();
+				wordTags.add(wts);
+				for (String str : line.split("\\s+")) {
+					if (!str.trim().equals(""))
+						wts.add(new WordTag(str.split("/")[0], str.split("/")[1]));
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return wordTags;
 	}
 }

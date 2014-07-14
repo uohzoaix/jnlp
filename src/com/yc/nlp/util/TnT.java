@@ -95,6 +95,11 @@ public class TnT {
 		return Math.log(this.eos.get(tag + "-EOS")) - Math.log(this.eosd.get(tag));
 	}
 
+	/**
+	 * 训练样本，将每个字的词性进行存储
+	 * 
+	 * @param data
+	 */
 	public void train(List<List<WordTag>> data) {
 		Tuple<String> now = new Tuple<String>();
 		now.addAll(Arrays.asList("BOS", "BOS"));
@@ -155,19 +160,25 @@ public class TnT {
 		}
 	}
 
+	/**
+	 * 获取每个字最有可能的一种词性
+	 * 
+	 * @param data
+	 * @return
+	 * @throws Exception
+	 */
 	public List<Result> tag(List<String> data) throws Exception {
 		List<Tag> tags = new ArrayList<Tag>(getNum());
 		tags.add(new Tag(new Pre("BOS", "BOS"), 0.0, ""));
 		Map<Pre, StageValue> stage = new HashMap<Pre, StageValue>();
 		for (String ch : data) {
 			stage = new HashMap<Pre, StageValue>();
-			String w = ch.toString();
 			Set<String> samples = status;
-			if (this.word.containsKey(w)) {
-				samples = this.word.get(w);
+			if (this.word.containsKey(ch)) {
+				samples = this.word.get(ch);
 			}
 			for (String s : samples) {
-				double wd = Math.log(this.wd.get(s + "-" + w)) - Math.log(this.uni.get(s));
+				double wd = Math.log(this.wd.get(s + "-" + ch)) - Math.log(this.uni.get(s));
 				for (Tag tag : tags) {
 					double p = tag.getScore() + wd + this.trans.get(tag.getPrefix().toString() + "-" + s);
 					Pre pre = new Pre(tag.getPrefix().getTwo(), s);
