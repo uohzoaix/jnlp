@@ -1,7 +1,6 @@
 package com.yc.nlp.prop;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.Map;
 
 public class AddOneProb extends BaseProb implements Serializable {
@@ -9,8 +8,7 @@ public class AddOneProb extends BaseProb implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public AddOneProb() {
-		data = new HashMap<String, Double>();
-		total = 0.0;
+		super();
 		none = 1d;
 	}
 

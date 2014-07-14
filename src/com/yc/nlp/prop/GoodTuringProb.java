@@ -13,8 +13,7 @@ public class GoodTuringProb extends BaseProb implements Serializable {
 	public Boolean handled;
 
 	public GoodTuringProb() {
-		data = new HashMap<String, Double>();
-		total = 0.0;
+		super();
 		handled = false;
 	}
 
