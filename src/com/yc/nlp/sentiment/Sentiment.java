@@ -1,10 +1,6 @@
 package com.yc.nlp.sentiment;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +12,7 @@ import com.yc.nlp.classification.Bayes;
 import com.yc.nlp.normal.Normal;
 import com.yc.nlp.pojo.ClassifyResult;
 import com.yc.nlp.seg.InitSeg;
+import com.yc.nlp.util.MemFile;
 
 public class Sentiment {
 
@@ -30,8 +27,8 @@ public class Sentiment {
 		this.classifier = new Bayes();
 		seg = Setup.getSeg();
 		normal = Setup.getNormal();
-		//seg = new InitSeg();
-		//normal = new Normal();
+		// seg = new InitSeg();
+		// normal = new Normal();
 		this.load("com/yc/nlp/sentiment/sentiment.marshal");
 		logger.debug("initialize sentiment end...");
 	}
@@ -51,37 +48,15 @@ public class Sentiment {
 	public void train(String negFile, String posFile) {
 		List<String> negDocs = new ArrayList<String>();
 		List<String> posDocs = new ArrayList<String>();
-		FileReader reader = null;
-		BufferedReader br = null;
-		try {
-			reader = new FileReader(new File(this.getClass().getClassLoader().getResource(this.getClass().getPackage().getName().replace(".", "/") + "/" + negFile).getPath()));
-			br = new BufferedReader(reader);
-			String line = null;
-			while ((line = br.readLine()) != null) {
-				line = line.trim();
-				negDocs.add(line);
-			}
-			reader = new FileReader(new File(this.getClass().getClassLoader().getResource(this.getClass().getPackage().getName().replace(".", "/") + "/" + posFile).getPath()));
-			br = new BufferedReader(reader);
-			line = null;
-			while ((line = br.readLine()) != null) {
-				line = line.trim();
-				posDocs.add(line);
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (br != null)
-					br.close();
-				if (reader != null)
-					reader.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		BufferedReader br = MemFile.readFile(negFile, this);
+		if (br != null) {
+			negDocs = MemFile.sentimentFile(br, negDocs);
 		}
+		br = MemFile.readFile(posFile, this);
+		if (br != null) {
+			posDocs = MemFile.sentimentFile(br, posDocs);
+		}
+
 		List<Object[]> data = new ArrayList<Object[]>();
 		for (String sent : negDocs) {
 			List<String> words = this.handle(sent);
@@ -110,8 +85,8 @@ public class Sentiment {
 
 	public static void main(String[] args) {
 		Sentiment sentiment = new Sentiment();
-		//sentiment.train("neg.txt", "pos.txt");
-		//sentiment.save("sentiment.marshal");
+		// sentiment.train("neg.txt", "pos.txt");
+		// sentiment.save("sentiment.marshal");
 		sentiment.load("com/yc/nlp/sentiment/sentiment.marshal");
 	}
 }

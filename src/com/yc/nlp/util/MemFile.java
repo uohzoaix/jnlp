@@ -224,13 +224,7 @@ public class MemFile {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			closeBR(br);
 		}
 		return stop;
 	}
@@ -253,13 +247,7 @@ public class MemFile {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			closeBR(br);
 		}
 		return pinyin;
 	}
@@ -282,13 +270,7 @@ public class MemFile {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			closeBR(br);
 		}
 		return zh2hans;
 	}
@@ -308,14 +290,33 @@ public class MemFile {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			closeBR(br);
 		}
 		return wordTags;
+	}
+
+	public static List<String> sentimentFile(BufferedReader br, List<String> list) {
+		String line = null;
+		try {
+			while ((line = br.readLine()) != null) {
+				line = line.trim();
+				list.add(line);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			closeBR(br);
+		}
+		return list;
+	}
+
+	private static void closeBR(BufferedReader br) {
+		if (br != null) {
+			try {
+				br.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }
