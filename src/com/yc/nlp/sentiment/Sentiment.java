@@ -41,10 +41,20 @@ public class Sentiment {
 		this.classifier.load(fname);
 	}
 
+	/**
+	 * 对分词结果进行停止词过滤
+	 * @param doc
+	 * @return
+	 */
 	public List<String> handle(String doc) {
 		return normal.filterStop(new ArrayList<String>(seg.seg(doc)));
 	}
 
+	/**
+	 * 贝叶斯分类训练
+	 * @param negFile 消极文件
+	 * @param posFile 积极文件
+	 */
 	public void train(String negFile, String posFile) {
 		List<String> negDocs = new ArrayList<String>();
 		List<String> posDocs = new ArrayList<String>();
@@ -75,6 +85,11 @@ public class Sentiment {
 		this.classifier.train(data);
 	}
 
+	/**
+	 * 贝叶斯分类
+	 * @param sent
+	 * @return
+	 */
 	public double classify(String sent) {
 		ClassifyResult result = this.classifier.classify(this.handle(sent));
 		if (result.getRet().equals("pos")) {

@@ -5,6 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * tf-idf应用
+ * @author uohzoaix
+ *
+ */
 public class BM25 {
 
 	private Integer d;
@@ -29,68 +34,12 @@ public class BM25 {
 		init();
 	}
 
-	public Integer getD() {
-		return d;
-	}
-
-	public void setD(Integer d) {
-		this.d = d;
-	}
-
-	public Double getAvgdl() {
-		return avgdl;
-	}
-
-	public void setAvgdl(Double avgdl) {
-		this.avgdl = avgdl;
-	}
-
-	public List<List<String>> getDocs() {
-		return docs;
-	}
-
-	public void setDocs(List<List<String>> docs) {
-		this.docs = docs;
-	}
-
 	public List<Map<String, Integer>> getF() {
 		return f;
 	}
 
-	public void setF(List<Map<String, Integer>> f) {
-		this.f = f;
-	}
-
-	public Map<String, Integer> getDf() {
-		return df;
-	}
-
-	public void setDf(Map<String, Integer> df) {
-		this.df = df;
-	}
-
 	public Map<String, Double> getIdf() {
 		return idf;
-	}
-
-	public void setIdf(Map<String, Double> idf) {
-		this.idf = idf;
-	}
-
-	public Double getK1() {
-		return k1;
-	}
-
-	public void setK1(Double k1) {
-		this.k1 = k1;
-	}
-
-	public Double getB() {
-		return b;
-	}
-
-	public void setB(Double b) {
-		this.b = b;
 	}
 
 	private void init() {
@@ -118,7 +67,8 @@ public class BM25 {
 			if (!this.f.get(index).containsKey(word)) {
 				continue;
 			}
-			score += (this.idf.get(word) * this.f.get(index).get(word) * (this.k1 + 1) / (this.f.get(index).get(word) + this.k1 * (1 - this.b + this.b * this.d / this.avgdl)));
+			score += (this.idf.get(word) * this.f.get(index).get(word) * (this.k1 + 1) / (this.f.get(index).get(word) + this.k1
+					* (1 - this.b + this.b * this.d / this.avgdl)));
 		}
 		return score;
 	}
