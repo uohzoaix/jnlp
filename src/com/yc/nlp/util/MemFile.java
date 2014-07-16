@@ -310,6 +310,27 @@ public class MemFile {
 		return list;
 	}
 
+	public static List<List<WordTag>> tagFile(BufferedReader br, List<List<WordTag>> wordTags) {
+		String line = null;
+		try {
+			while ((line = br.readLine()) != null) {
+				line = line.trim();
+				List<WordTag> wts = new ArrayList<WordTag>();
+				wordTags.add(wts);
+				String[] words = line.split("\\s+");
+				for (String str : words) {
+					if (!str.trim().equals(""))
+						wts.add(new WordTag(str.split("/")[0], str.split("/")[1]));
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			closeBR(br);
+		}
+		return wordTags;
+	}
+
 	private static void closeBR(BufferedReader br) {
 		if (br != null) {
 			try {

@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -13,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.yc.nlp.pojo.Result;
 import com.yc.nlp.pojo.WordTag;
+import com.yc.nlp.util.MemFile;
 import com.yc.nlp.util.TnT;
 
 public class Tag {
@@ -37,36 +39,10 @@ public class Tag {
 	}
 
 	public void train(String fileName) {
-		FileReader reader = null;
-		BufferedReader br = null;
 		List<List<WordTag>> wordTags = new ArrayList<List<WordTag>>();
-		try {
-			reader = new FileReader(new File(this.getClass().getClassLoader().getResource(this.getClass().getPackage().getName().replace(".", "/") + "/" + fileName).getPath()));
-			br = new BufferedReader(reader);
-			String line = null;
-			while ((line = br.readLine()) != null) {
-				line = line.trim();
-				List<WordTag> wts = new ArrayList<WordTag>();
-				wordTags.add(wts);
-				String[] words = line.split("\\s+");
-				for (String str : words) {
-					if (!str.trim().equals(""))
-						wts.add(new WordTag(str.split("/")[0], str.split("/")[1]));
-				}
-			}
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				if (br != null)
-					br.close();
-				if (reader != null)
-					reader.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		BufferedReader br = MemFile.readFile(fileName, this);
+		if (br != null) {
+			wordTags = MemFile.tagFile(br, wordTags);
 		}
 		this.tnt.train(wordTags);
 	}
