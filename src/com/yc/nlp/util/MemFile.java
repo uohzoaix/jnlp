@@ -24,8 +24,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.yc.nlp.pojo.WordTag;
-import com.yc.nlp.prop.AddOneProb;
-import com.yc.nlp.prop.BaseProb;
+import com.yc.nlp.prob.AddOneProb;
+import com.yc.nlp.prob.BaseProb;
 
 public class MemFile {
 

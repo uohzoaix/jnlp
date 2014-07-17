@@ -43,6 +43,7 @@ public class Sentiment {
 
 	/**
 	 * 对分词结果进行停止词过滤
+	 * 
 	 * @param doc
 	 * @return
 	 */
@@ -52,8 +53,11 @@ public class Sentiment {
 
 	/**
 	 * 贝叶斯分类训练
-	 * @param negFile 消极文件
-	 * @param posFile 积极文件
+	 * 
+	 * @param negFile
+	 *            消极文件
+	 * @param posFile
+	 *            积极文件
 	 */
 	public void train(String negFile, String posFile) {
 		List<String> negDocs = new ArrayList<String>();
@@ -87,6 +91,7 @@ public class Sentiment {
 
 	/**
 	 * 贝叶斯分类
+	 * 
 	 * @param sent
 	 * @return
 	 */
@@ -100,8 +105,8 @@ public class Sentiment {
 
 	public static void main(String[] args) {
 		Sentiment sentiment = new Sentiment();
-		// sentiment.train("neg.txt", "pos.txt");
-		// sentiment.save("sentiment.marshal");
+		sentiment.train("neg.txt", "pos.txt");
+		sentiment.save("sentiment.marshal");
 		sentiment.load("com/yc/nlp/sentiment/sentiment.marshal");
 	}
 }

@@ -1,7 +1,6 @@
-package com.yc.nlp.util.prob;
+package com.yc.nlp.prob;
 
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,8 +12,7 @@ public class GoodTuringProb extends BaseProb implements Serializable {
 	public Boolean handled;
 
 	public GoodTuringProb() {
-		data = new HashMap<String, Double>();
-		total = 0.0;
+		super();
 		handled = false;
 	}
 
@@ -44,8 +42,4 @@ public class GoodTuringProb extends BaseProb implements Serializable {
 		return data.get(key);
 	}
 
-	@Override
-	public Map<String, Double> getData() {
-		return data;
-	}
 }

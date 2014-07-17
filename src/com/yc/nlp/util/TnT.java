@@ -15,9 +15,9 @@ import com.yc.nlp.pojo.Result;
 import com.yc.nlp.pojo.StageValue;
 import com.yc.nlp.pojo.Tag;
 import com.yc.nlp.pojo.WordTag;
-import com.yc.nlp.prop.AddOneProb;
-import com.yc.nlp.prop.BaseProb;
-import com.yc.nlp.prop.NormalProb;
+import com.yc.nlp.prob.AddOneProb;
+import com.yc.nlp.prob.BaseProb;
+import com.yc.nlp.prob.NormalProb;
 
 public class TnT {
 

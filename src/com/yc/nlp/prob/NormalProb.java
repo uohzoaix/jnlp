@@ -1,7 +1,6 @@
-package com.yc.nlp.util.prob;
+package com.yc.nlp.prob;
 
 import java.io.Serializable;
-import java.util.Map;
 
 public class NormalProb extends BaseProb implements Serializable {
 
@@ -14,11 +13,6 @@ public class NormalProb extends BaseProb implements Serializable {
 		}
 		data.put(key, data.get(key) + value);
 		total += value;
-	}
-
-	@Override
-	public Map<String, Double> getData() {
-		return data;
 	}
 
 }

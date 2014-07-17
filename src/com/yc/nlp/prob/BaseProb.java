@@ -1,4 +1,4 @@
-package com.yc.nlp.prop;
+package com.yc.nlp.prob;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -40,6 +40,8 @@ public abstract class BaseProb implements Serializable {
 
 	public abstract void add(String key, Integer value);
 
-	public abstract Map<String, Double> getData();
+	public Map<String, Double> getData() {
+		return data;
+	}
 
 }

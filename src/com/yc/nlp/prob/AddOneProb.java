@@ -1,7 +1,6 @@
-package com.yc.nlp.prop;
+package com.yc.nlp.prob;
 
 import java.io.Serializable;
-import java.util.Map;
 
 public class AddOneProb extends BaseProb implements Serializable {
 
@@ -21,10 +20,4 @@ public class AddOneProb extends BaseProb implements Serializable {
 		}
 		data.put(key, data.get(key) + value);
 	}
-
-	@Override
-	public Map<String, Double> getData() {
-		return data;
-	}
-
 }
