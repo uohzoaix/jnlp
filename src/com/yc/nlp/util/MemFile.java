@@ -160,18 +160,13 @@ public class MemFile {
 			ByteArrayInputStream bi = new ByteArrayInputStream(result);
 			ObjectInputStream oi = new ObjectInputStream(bi);
 			Map<String, Object> data = (Map<String, Object>) oi.readObject();
+			Field[] fields = obj.getClass().getDeclaredFields();
 			for (Map.Entry<String, Object> entry : data.entrySet()) {
-				Field[] fields = obj.getClass().getDeclaredFields();
 				for (Field field : fields) {
 					if (field.getName().equals(entry.getKey())) {
 						field.setAccessible(!field.isAccessible());
 						if (field.getName().equals("d")) {
-							Map<String, AddOneProb> value = (Map<String, AddOneProb>) entry.getValue();
-							Map<String, AddOneProb> d = new HashMap<String, AddOneProb>();
-							for (Map.Entry<String, AddOneProb> entry1 : value.entrySet()) {
-								d.put(entry1.getKey(), entry1.getValue());
-							}
-							field.set(obj, d);
+							field.set(obj, (Map<String, AddOneProb>) entry.getValue());
 						} else {
 							field.set(obj, entry.getValue());
 						}
