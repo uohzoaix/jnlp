@@ -131,12 +131,13 @@ public class TnT {
 			double c3 = this.tntDiv(this.tri.get(now.toString()) - 1, this.bi.get(now.subList(0, 2).toString()) - 1);
 			double c2 = this.tntDiv(this.bi.get(now.subList(1, now.size()).toString()) - 1, this.uni.get(now.get(1)) - 1);
 			double c1 = this.tntDiv(this.uni.get(now.get(2)) - 1, this.uni.getSum() - 1);
+			double result=this.tri.get(now.toString());
 			if (c3 >= c1 && c3 >= c2) {
-				tl3 += this.tri.get(now.toString());
+				tl3 += result;
 			} else if (c2 >= c1 && c2 >= c3) {
-				tl2 += this.tri.get(now.toString());
+				tl2 += result;
 			} else if (c1 >= c2 && c1 >= c3) {
-				tl1 += this.tri.get(now.toString());
+				tl1 += result;
 			}
 		}
 		this.l1 = tl1 / (tl1 + tl2 + tl3);
