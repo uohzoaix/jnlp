@@ -35,4 +35,9 @@ public class Tag {
 		this.suffix = suffix;
 	}
 
+	@Override
+	public String toString() {
+		return getPrefix().toString() + "-" + getScore() + "-" + getSuffix();
+	}
+
 }
